@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Question CRUD</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/design.css">
+    <script src="js/model/question.js"></script>
+    <script src="js/model/questionOperation.js"></script>
+    <script src="js/controllers/question.js"></script>
+</head>
+
+<body>
+    <div class='container'>
+        <h1 class='alert-info text-center'>Question CRUD</h1>
+        <div class='form-group'>
+            <label for="id">Question Id</label>
+            <input id="id" class='form-control' type="text" placeholder="Type Question id">
+        </div>
+        <div class='form-group'>
+            <label for="id"> Name</label>
+            <textarea id="name" placeholder="Type Question Here" class='form-control' rows="6" cols="20"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="">OptionA</label>
+            <input id="optionA" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">OptionB</label>
+            <input id="optionB" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">OptionC</label>
+            <input id="optionC" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">OptionD</label>
+            <input id="optionD" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">Right Ans</label>
+            <input id="rightAns" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">Score</label>
+            <input min="1" max="10" id="score" type="range" class="form-control">
+        </div>
+        <div>
+            <button id="add" class='btn btn-primary mr-2'><i class="fas fa-plus-square"></i>&nbsp;Add</button>
+            
+            <button id="search" class='btn btn-primary mr-2'><i class="fas fa-search"></i>&nbsp;Search</button>
+            <button id="sort" class='btn btn-primary mr-2'><i class="fas fa-sort"></i>&nbsp;Sort</button>
+            <button id="save" class='btn btn-primary mr-2'> <i class="fas fa-save"></i>&nbsp;Save</button>
+            <button id="load" class='btn btn-primary mr-2'><i class="fas fa-spinner"></i>&nbsp;Load</button>
+            <button id="update" class='btn btn-primary mr-2'><i class="fas fa-edit"></i>&nbsp;Update</button>
+            <button id="delete" class='btn btn-danger mr-2'><i class="fas fa-trash-alt"></i> &nbsp;Delete</button>
+            <button id="clear"class='btn btn-danger'><i class="fas fa-thermometer-empty"></i>&nbsp;Clear All</button>
+            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+            <button id="server" class='btn btn-success mr-2'><i class="fas fa-server"></i> &nbsp;Save to Server</button>
+            <br/>
+            <br/>
+        </div>
+        <div id="searchBy" >
+            <input id = "qID" type="text" placeholder="enter questionID">
+        </div>
+        <div id="sortDiv">
+            <label for="">Sort By</label>
+            <select id="sortby">
+                <option value="id">Id</option>
+                <option value="name">Name</option>
+                <option value="score">Score</option>
+            </select>
+            <input type="checkbox"> Asc/Desc
+        </div>
+        <br/><br/>
+        <h2>Total Records&nbsp;&nbsp;<span id="total">&nbsp;&nbsp;</span> Mark for Delete &nbsp;&nbsp;<span id="mark">&nbsp;&nbsp;</span> UnMark&nbsp;&nbsp; <span id="unmark"></span> </h2>
+        <table class='table table-bordered'>
+            <thead class='thead-dark'>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>OptionA</th>
+                    <th>OptionB</th>
+                    <th>OptionC</th>
+                    <th>OptionD</th>
+                    <th>Right Ans</th>
+                    <th>Score</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody id="question">
+
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
