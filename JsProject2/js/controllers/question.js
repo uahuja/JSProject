@@ -1,0 +1,186 @@
+
+window.addEventListener("load",init);
+
+const fn = initCount();
+const loadCount = ()=>document.querySelector("#id").innerText=fn();
+
+function init(){
+    loadCount();
+    var div = document.querySelector("#sortDiv");
+    div.className = "hide";
+    var div1=document.querySelector("#searchBy");
+    div1.className= "hide";                             //forcefully Applying Class
+    displayCount();
+    bindEvents();
+    
+}
+
+const deleteRecords=()=>
+    printRecords(questionOperation.deleteRecords());
+
+
+function printRecords(questions){
+    document.querySelector("#question").innerHTML = "";
+    questions.forEach(question=>print(question));
+    displayCount();
+}
+
+
+
+function saveToServer(questionObject){
+    var pr = firebase.database().ref('questions/'+questionObject.id).set(questionObject);
+    pr.then(res=>{
+        alert("Record Saved...");
+    }).catch(err=>{
+        alert("Record Not Saved");
+        console.log("Error is ",err);
+    })
+}
+
+
+function loadFromServer(){
+    var questions = firebase.database().ref("questions");
+    questions.on('value',(snapshot)=>{
+        var objects = snapshot.val();
+        console.log("Objects are ",objects);
+    })
+}
+
+
+
+
+function displayCount(){
+    document.querySelector("#total").innerText = questionOperation.questions.length;
+    document.querySelector("#mark").innerText = questionOperation.markCount();
+    document.querySelector("#unmark").innerText = questionOperation.unMarkCount();
+
+
+}
+function bindEvents(){
+    document.querySelector("#add").addEventListener("click",addQuestion);
+    document.querySelector("#delete").addEventListener("click",deleteRecords);
+    document.querySelector("#load").addEventListener("click", loadRecords);
+    document.querySelector("#sortby").addEventListener("change",doSort);
+    document.querySelector("#sort").addEventListener("click",showHideSort);
+    document.querySelector("#search").addEventListener("click",showHideSearch);
+    document.querySelector("#find").addEventListener("click", searchRecords);
+    document.querySelector("#update").addEventListener("click",update);
+    document.querySelector("#save2server").addEventListener("click",saveToServer);
+}
+
+function loadRecords(){
+    printRecords(questionOperation.questions);
+}
+function searchRecords(){
+    var id = document.querySelector("#qID").value;
+    printRecords(questionOperation.searchRecords(id));
+}
+
+function showHideSearch(){
+    var div = document.querySelector("#searchBy");
+    div.classList.toggle("hide");
+}
+function showHideSort(){
+    var div = document.querySelector("#sortDiv");
+    div.classList.toggle("hide");
+}
+function doSort(){
+   var sortBy = this.value; 
+   printRecords(questionOperation.sort(sortBy,'A'));
+}
+
+function addQuestion(){
+    var questionObject = new Question();
+    for(let key in questionObject){
+       if(key == "markForDelete"){
+           continue;
+       }
+       if(key=='id'){
+        questionObject[key] =  document.querySelector("#"+key).innerText ; 
+        continue;
+    }
+       questionObject[key] =  document.querySelector("#"+key).value ;
+    }
+    loadCount();
+    questionOperation.add(questionObject);
+    print(questionObject);
+    displayCount();
+   // var id = document.querySelector("#id").value;
+    //var name = document.querySelector("#name").value;
+}
+function print(question){
+        var index = 0;
+        var tbody=document.querySelector("#question");
+        var tr = tbody.insertRow();
+        for(let key in question){
+            if(key == "markForDelete"){
+                continue;
+            }
+            tr.insertCell(index).innerText = question[key];
+            index++;
+        }
+        var td = tr.insertCell(index);
+        td.appendChild(createIcon("fas fa-trash-alt mr-2", toggleMark,question.id));
+        td.appendChild(createIcon("fas fa-edit", editMark,question.id));
+
+    }
+
+function toggleMark(){
+    var questionId= this.getAttribute("qid");
+    console.log("Mark Toggle Call ",this.getAttribute("qid"));
+    console.log("This is ",this);
+    var tr = this.parentNode.parentNode;
+    //tr.className="alert-danger";
+    tr.classList.toggle("alert-danger");
+    questionOperation.mark(questionId);
+    displayCount();
+
+}
+var questionObject ;
+function editMark(){
+    console.log("inside edit");
+    var qid= this.getAttribute('qid');
+    questionObject=questionOperation.searchRecords(qid);
+    fillInputs(questionObject);
+}
+
+
+
+function fillInputs(questionObject){
+    for(let key in questionObject){
+        if(key=="id"){
+            document.querySelector("#"+key).innerText=questionObject[key];
+        }
+        if(key=="markForDelete"){
+            continue;
+        }
+        document.querySelector("#"+key).value=questionObject[key];
+    }
+}
+
+function update(){
+    for(let key  in questionObject){
+        if(key=='id' || key=='markForDelete'){
+            
+        continue;
+        }
+       
+        questionObject[key] =  document.querySelector("#"+key).value 
+    }
+    printRecords(questionOperation.questions);
+}
+
+
+
+function createIcon(className,fn,id){
+    
+    var i = document.createElement("i");
+    i.className=className;
+    i.addEventListener("click",fn);
+    i.setAttribute("qid" , id);
+    return i;
+}
+
+function unHook(){
+    document.querySelector("#add").removeEventListener("click");
+}
